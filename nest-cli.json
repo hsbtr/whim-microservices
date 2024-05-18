@@ -1,8 +1,32 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/whim-low-code/src",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/whim-low-code/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/whim-low-code",
+  "projects": {
+    "whim-low-code": {
+      "type": "application",
+      "root": "apps/whim-low-code",
+      "entryFile": "main",
+      "sourceRoot": "apps/whim-low-code/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/whim-low-code/tsconfig.app.json"
+      }
+    },
+    "devops": {
+      "type": "application",
+      "root": "apps/devops",
+      "entryFile": "main",
+      "sourceRoot": "apps/devops/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/devops/tsconfig.app.json"
+      }
+    }
   }
 }
