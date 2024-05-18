@@ -1,0 +1,9 @@
+{
+  "name": "whim-low-code",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "dev": "cd .. && pnpm start:lowcode",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
