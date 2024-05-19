@@ -1,6 +1,6 @@
 import { Catch, HttpException, HttpStatus } from '@nestjs/common';
 import { BusinessException } from './business.exception';
-import type { ExceptionFilter, ArgumentsHost,  } from '@nestjs/common';
+import type { ExceptionFilter, ArgumentsHost } from '@nestjs/common';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -31,4 +31,3 @@ export class HttpExceptionFilter implements ExceptionFilter {
     });
   }
 }
-

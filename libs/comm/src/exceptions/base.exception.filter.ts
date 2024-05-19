@@ -1,5 +1,5 @@
 import { Catch, HttpStatus, ServiceUnavailableException } from '@nestjs/common';
-import type { ExceptionFilter,   ArgumentsHost, } from '@nestjs/common';
+import type { ExceptionFilter, ArgumentsHost } from '@nestjs/common';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -17,4 +17,3 @@ export class AllExceptionsFilter implements ExceptionFilter {
     });
   }
 }
-
