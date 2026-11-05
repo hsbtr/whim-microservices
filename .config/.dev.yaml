@@ -13,11 +13,11 @@ MONGODB_CONFIG:
 MYSQL_CONFIG:
   name: "material_test"
   type: "mysql"
-  host: "121.36.198.10"
+  host: "127.0.0.1"
   port: 3306
-  username: "root"
-  password: "123456"
-  database: "material_test"
+  username: "whim_gui_admin"
+  password: "gui_super_admin"
+  database: "whim_gui"
   entities: "mysql"
   logging: true
   synchronize: true
