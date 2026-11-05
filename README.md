@@ -32,6 +32,25 @@
 $ pnpm install
 ```
 
+## Formatting and line endings
+
+Text files use LF, enforced by `.gitattributes`, `.editorconfig`, and Prettier.
+Windows batch scripts use CRLF. Configure your IDE to use this project's
+Prettier installation and enable formatting on save.
+
+After cloning, install dependencies with `pnpm install --frozen-lockfile`.
+Do not copy `node_modules` from another checkout: pnpm's Windows junctions may
+still point to the old location. Reinstall dependencies after moving the project.
+
+```bash
+pnpm format        # Format TypeScript source files
+pnpm format:check  # Check formatting without changing files
+pnpm lint:check    # Check ESLint rules without changing files
+```
+
+Run both check commands before submitting changes and as CI validation steps.
+The existing `pnpm lint` command applies fixes; use `lint:check` in CI.
+
 ## Running the app
 
 ```bash
