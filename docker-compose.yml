@@ -1,22 +1,47 @@
-version: '3.3'
-
-volumes:
-  mongodb_data:
-  mysql_data:
+name: whim-microservices
 
 services:
-  mongo:
-    image: bitnami/mongodb:5.0.8
-    volumes:
-      - 'mongodb_data:/Users/Shared/mongodb'
-    ports:
-      - "27017:27017"
-
-  mysql:
-    image: bitnami/mysql:8.0
+  whim-low-code:
+    build:
+      context: .
+      args:
+        APP_NAME: whim-low-code
+    restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD=123456
-    volumes:
-      - 'mysql_data:/Users/Shared/mysql'
+      NODE_ENV: production
+      RUNNING_ENV: docker
+      TZ: Asia/Shanghai
     ports:
-      - "3306:3306"
+      - '3000:3000'
+    volumes:
+      - type: bind
+        source: ./.config/.docker.yaml
+        target: /app/.config/.docker.yaml
+        read_only: true
+        bind:
+          create_host_path: false
+
+  devops:
+    build:
+      context: .
+      args:
+        APP_NAME: devops
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      RUNNING_ENV: docker
+      TZ: Asia/Shanghai
+    ports:
+      - '3001:3001'
+    volumes:
+      - type: bind
+        source: ./.config/.docker.yaml
+        target: /app/.config/.docker.yaml
+        read_only: true
+        bind:
+          create_host_path: false
+
+networks:
+  default:
+    name: whim-backend
+    external: true
