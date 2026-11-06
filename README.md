@@ -21,7 +21,6 @@ libs/comm/src/
   interceptors/       # 成功响应包装
   utils/              # 环境识别与 YAML 配置读取
 .config/.dev.yaml      # 当前提供的开发环境配置
-.config/.docker.yaml   # 容器环境配置，运行时只读挂载
 docker-compose.yml    # 两个后端应用
 Dockerfile            # 共用多阶段镜像构建，通过 APP_NAME 选择应用
 nest-cli.json         # Nest 应用、公共库与构建配置
@@ -70,7 +69,7 @@ pnpm start:devops
 <当前工作目录>/.config/.<RUNNING_ENV>.yaml
 ```
 
-- `RUNNING_ENV=dev` 对应 `.config/.dev.yaml`；容器使用 `RUNNING_ENV=docker`，对应 `.config/.docker.yaml`。
+- 本机和当前 Compose 均使用 `RUNNING_ENV=dev`，读取 `.config/.dev.yaml`；容器通过只读挂载获取该文件。
 - 配置包含 `TEST_VALUE`、`MONGODB_CONFIG` 和 `MYSQL_CONFIG`；数据库连接参数请按本地环境设置，不要提交真实凭据。
 - `ConfigModule` 设置了 `ignoreEnvFile: true`，不会自动加载 `.env` 文件。原来的三个根目录 `.env.*` 仅有未引用的 `DATABASE_USER` / `DATABASE_PASSWORD`，现已移除。
 - YAML 中不会自动展开 `${变量名}`，数据库地址和凭据需要按外部环境填写。
@@ -175,7 +174,7 @@ docker network create whim-backend
 
 外部数据库容器需要加入该网络，并提供与应用配置一致的网络别名；如果数据库在其他服务器上，直接在 YAML 中填写应用容器可访问的地址。当前示例应用尚未接入数据库访问模块，不要求先准备数据库即可运行示例接口。
 
-本机开发使用 `pnpm start:lowcode`、`pnpm start:devops` 和 `.config/.dev.yaml`；容器运行使用 `.config/.docker.yaml`。
+本机开发使用 `pnpm start:lowcode`、`pnpm start:devops`；本机与容器运行均使用 `.config/.dev.yaml`。
 
 ### 容器运行后端
 
@@ -185,11 +184,11 @@ docker compose up -d --build
 docker compose logs -f
 ```
 
-共用 Dockerfile 使用 Node.js 22 和 pnpm 11.10.0，按 `APP_NAME` 分别构建两个应用；运行阶段仅复制生产依赖和选定应用的构建产物，以 `node` 用户运行。配置文件不进入镜像，Compose 将 `.config/.docker.yaml` 只读挂载到 `/app/.config/.docker.yaml`。
+共用 Dockerfile 使用 Node.js 22 和 pnpm 11.10.0，按 `APP_NAME` 分别构建两个应用；运行阶段仅复制生产依赖和选定应用的构建产物，以 `node` 用户运行。配置文件不进入镜像，Compose 将 `.config/.dev.yaml` 只读挂载到 `/app/.config/.dev.yaml`。
 
 低代码文档地址为 http://localhost:3000/api/docs，DevOps 文档地址为 http://localhost:3001/api/docs。该方式运行构建产物，不提供源码热更新；修改源码后重新执行 `up -d --build`，修改 YAML 后执行 `docker compose restart`。
 
-`.config/.docker.yaml` 中的 `mysql`、`mongo`、`redis` 是示例地址，仅在外部数据库容器位于同一网络且具有对应别名时有效。接入实际客户端前，请替换地址、端口和凭据。容器内的 `127.0.0.1` 指向应用容器自身，不能用于访问其他数据库容器。
+接入实际数据库客户端前，请按运行环境调整 `.config/.dev.yaml` 中的地址、端口和凭据。容器内的 `127.0.0.1` 指向应用容器自身，不能用于访问其他数据库容器；应填写应用容器可访问的数据库地址。
 
 数据库、业务库、用户和表结构由外部环境或后续迁移流程准备；本仓库不会自动创建。真实密码不要提交到 Git。
 

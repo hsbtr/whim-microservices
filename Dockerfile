@@ -22,7 +22,7 @@ RUN pnpm install --prod --frozen-lockfile
 FROM node:22-bookworm-slim AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
-ENV RUNNING_ENV=docker
+ENV RUNNING_ENV=dev
 COPY --from=production-dependencies --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /output ./dist
 USER node

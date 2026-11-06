@@ -9,14 +9,14 @@ services:
     restart: unless-stopped
     environment:
       NODE_ENV: production
-      RUNNING_ENV: docker
+      RUNNING_ENV: dev
       TZ: Asia/Shanghai
     ports:
       - '3000:3000'
     volumes:
       - type: bind
-        source: ./.config/.docker.yaml
-        target: /app/.config/.docker.yaml
+        source: ./.config/.dev.yaml
+        target: /app/.config/.dev.yaml
         read_only: true
         bind:
           create_host_path: false
@@ -29,14 +29,14 @@ services:
     restart: unless-stopped
     environment:
       NODE_ENV: production
-      RUNNING_ENV: docker
+      RUNNING_ENV: dev
       TZ: Asia/Shanghai
     ports:
       - '3001:3001'
     volumes:
       - type: bind
-        source: ./.config/.docker.yaml
-        target: /app/.config/.docker.yaml
+        source: ./.config/.dev.yaml
+        target: /app/.config/.dev.yaml
         read_only: true
         bind:
           create_host_path: false
